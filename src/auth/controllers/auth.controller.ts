@@ -1,0 +1,25 @@
+import { Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Request } from 'express';
+import { AuthGuard } from '@nestjs/passport'
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
+
+import { AuthService } from '../services/auth.service';
+import { User } from 'src/users/entities/user.entity';
+
+
+
+@ApiTags('login')
+@Controller('auth')
+export class AuthController {
+
+  constructor(private authService: AuthService) {}
+
+  @UseGuards(AuthGuard('local'))
+  @Post('login')
+  @ApiOperation({summary: 'login to obtain a JWT to use all endpoints.'})
+  login(@Req() req: Request) {
+    const user = req.user as User;
+    return this.authService.generateJwt(user);
+
+  }
+}
