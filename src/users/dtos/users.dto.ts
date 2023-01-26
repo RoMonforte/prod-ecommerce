@@ -23,6 +23,11 @@ export class CreateUserDto {
   @IsNumber()
   @IsPositive()
   readonly customerId: number;
+  
+  @IsOptional()
+  @ApiProperty()
+  @IsUrl()
+  readonly image: string;
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
