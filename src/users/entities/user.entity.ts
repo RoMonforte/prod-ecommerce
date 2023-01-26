@@ -26,6 +26,9 @@ export class User {
 
   @Column({ type: 'varchar' })
   role: string;
+  
+  @Column({ type: 'varchar' })
+  image: string;
 
   @CreateDateColumn({
     name: 'create_at',
