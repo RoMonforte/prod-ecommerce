@@ -34,7 +34,6 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Roles(Role.ADMIN)
   @Get(':userId')
   @ApiOperation({summary: 'With the id get a user and see it more detailed'})
   @HttpCode(HttpStatus.ACCEPTED)
