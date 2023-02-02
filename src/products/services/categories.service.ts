@@ -4,11 +4,12 @@ import {
   NotAcceptableException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, FindConditions } from 'typeorm';
 
 import {
   CreateCategoryDto,
   UpdateCategoryDto,
+  FilterCategoriesDto
 } from 'src/products/dtos/categories.dto';
 import { Category } from '../entities/category.entity';
 
@@ -18,8 +19,17 @@ export class CategoriesService {
     @InjectRepository(Category) private categoryRepo: Repository<Category>,
   ) {}
 
-  findAll() {
-    return this.categoryRepo.find();
+  findAll(params?: FilterCategoriesDto) {
+    if (params) {
+      const where: FindConditions<Category> = {};
+      const { limit, offset } = params;
+
+      return this.categoryRepo.find({
+        where,
+        take: limit,
+        skip: offset,
+      });
+    }
   }
 
   async findOne(id: number) {
