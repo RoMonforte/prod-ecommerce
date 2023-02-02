@@ -9,6 +9,7 @@ import {
   HttpCode,
   HttpStatus,
   ParseIntPipe,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
@@ -17,6 +18,7 @@ import { CategoriesService } from 'src/products/services/categories.service';
 import {
   CreateCategoryDto,
   UpdateCategoryDto,
+  FilterCategoriesDto
 } from 'src/products/dtos/categories.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -35,8 +37,8 @@ export class CategoriesController {
   @Public()
   @Get()
   @ApiOperation({summary: 'Get all categories in the API.'})
-  getProducts() {
-    return this.categoriesService.findAll();
+  getCategories(@Query() params: FilterCategoriesDto,) {
+    return this.categoriesService.findAll(params);
   }
 
   @Public()
@@ -69,3 +71,4 @@ export class CategoriesController {
     return this.categoriesService.remove(+id);
   }
 }
+
