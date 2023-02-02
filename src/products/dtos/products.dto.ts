@@ -71,4 +71,9 @@ export class FilterProductsDto {
   @ValidateIf((item) => item.minPrice)
   @IsPositive()
   maxPrice: number;
+
+  @IsOptional()
+  @IsPositive()
+  brandId: number;
 }
+
