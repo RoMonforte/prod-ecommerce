@@ -4,7 +4,7 @@ import {
   NotAcceptableException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between , FindConditions} from 'typeorm';
+import { Repository,} from 'typeorm';
 
 import {
   CreateProductDto,
@@ -28,18 +28,20 @@ export class ProductsService {
 
   findAll(params?: FilterProductsDto) {
     if (params) {
-      const where: FindConditions<Product> = {};
       const { limit, offset } = params;
-      const { maxPrice, minPrice } = params;
+      const { maxPrice, minPrice, brandId } = params;
+      let query = this.productRepo.createQueryBuilder('product')
+        .leftJoinAndSelect('product.brand', 'brand')
+        .take(limit)
+        .skip(offset)
+
       if (minPrice && maxPrice) {
-        where.price = Between(minPrice, maxPrice);
+        query = query.andWhere('product.price BETWEEN :minPrice AND :maxPrice', {minPrice, maxPrice});
       }
-      return this.productRepo.find({
-        relations: ['brand'],
-        where,
-        take: limit,
-        skip: offset,
-      });
+      if (brandId) {
+        query = query.andWhere('brand.id = :brandId', {brandId});
+      }
+      return query.getMany();
     }
     return this.productRepo.find({
       relations: ['brand'],
