@@ -43,16 +43,10 @@ export class BrandsService {
     if (!brand) {
       throw new NotFoundException(`Brand with id #${id} not found!`);
     }
-    const isUsed = await this.brandRepo.find({ where: { name: changes.name } });
-    if (isUsed.length === 0) {
       this.brandRepo.merge(brand, changes);
       return this.brandRepo.save(brand);
-    }
-    throw new NotAcceptableException(
-      `Brand with name ${changes.name} already exists`,
-    );
   }
-
+  
   async remove(id: number) {
     const brand = await this.brandRepo.findOne(id);
     if (!brand) {
