@@ -58,16 +58,8 @@ export class CategoriesService {
     if (!category) {
       throw new NotFoundException(`Category with id #${id} not found!`);
     }
-    const isUsed = await this.categoryRepo.find({
-      where: { name: changes.name },
-    });
-    if (isUsed.length === 0) {
       this.categoryRepo.merge(category, changes);
       return this.categoryRepo.save(category);
-    }
-    throw new NotAcceptableException(
-      `Brand with name ${changes.name} already exists`,
-    );
   }
 
   async remove(id: number) {
