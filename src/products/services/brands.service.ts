@@ -6,15 +6,24 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { CreateBrandDto, UpdateBrandDto } from 'src/products/dtos/brands.dto';
+import { CreateBrandDto, UpdateBrandDto, FilterBrandsDto } from 'src/products/dtos/brands.dto';
 import { Brand } from '../entities/brand.entity';
 
 @Injectable()
 export class BrandsService {
   constructor(@InjectRepository(Brand) private brandRepo: Repository<Brand>) {}
 
-  findAll() {
-    return this.brandRepo.find();
+  findAll(params?: FilterBrandsDto) {
+    if (params) {
+      const where: FindConditions<Brand> = {};
+      const { limit, offset } = params;
+
+      return this.brandRepo.find({
+        where,
+        take: limit,
+        skip: offset,
+      });
+    }
   }
 
   async findOne(id: number) {
