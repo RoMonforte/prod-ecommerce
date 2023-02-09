@@ -10,11 +10,12 @@ import {
   HttpStatus,
   ParseIntPipe,
   UseGuards,
+  Query
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 import { BrandsService } from 'src/products/services/brands.service';
-import { CreateBrandDto, UpdateBrandDto } from 'src/products/dtos/brands.dto';
+import { CreateBrandDto, UpdateBrandDto, FilterBrandsDto } from 'src/products/dtos/brands.dto';
 
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -31,8 +32,8 @@ export class BrandsController {
   @Public()
   @Get()
   @ApiOperation({summary: 'List of all brands in the API'})
-  getUsers() {
-    return this.brandsService.findAll();
+  getUsers(@Query() params: FilterBrandsDto,) {
+    return this.brandsService.findAll(params);
   }
 
   @Public()
