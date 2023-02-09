@@ -4,7 +4,7 @@ import {
   NotAcceptableException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, FindConditions } from 'typeorm';
 
 import { CreateBrandDto, UpdateBrandDto, FilterBrandsDto } from 'src/products/dtos/brands.dto';
 import { Brand } from '../entities/brand.entity';
